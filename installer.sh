@@ -2,9 +2,9 @@
 
 # Variables globals per als missatges en diversos idiomes
 declare -A MESSAGES=(
-    ["select_language_ca"]="Selecciona l'idioma (1 - Català, 2 - Español, 3 - English): "
-    ["select_language_es"]="Selecciona el idioma (1 - Català, 2 - Español, 3 - English): "
-    ["select_language_en"]="Select language (1 - Català, 2 - Español, 3 - English): "
+    ["select_language_ca"]="Selecciona l'idioma (ca, es, en): "
+    ["select_language_es"]="Selecciona el idioma (ca, es, en): "
+    ["select_language_en"]="Select language (ca, es, en): "
     ["checking_dependencies_ca"]="Comprovant dependències..."
     ["checking_dependencies_es"]="Comprobando dependencias..."
     ["checking_dependencies_en"]="Checking dependencies..."
@@ -52,29 +52,24 @@ function check_command() {
     return 0
 }
 
-# Preguntar per l'idioma amb números
-print_message "select_language"
-read -p "Selecciona un idioma (1 - Català, 2 - Español, 3 - English): " LANG_OPTION
+# Preguntar per l'idioma
+echo "Selecciona l'idioma:"
+echo "1. Català (ca)"
+echo "2. Español (es)"
+echo "3. English (en)"
+read -p "Introdueix el número de l'idioma: " LANG_NUM
 
-case $LANG_OPTION in
-    1)
-        LANGUAGE="ca"
-        ;;
-    2)
-        LANGUAGE="es"
-        ;;
-    3)
-        LANGUAGE="en"
-        ;;
-    *)
-        LANGUAGE="ca"
-        echo "Opció no vàlida. S'utilitzarà català per defecte."
-        ;;
+# Assignar idioma basat en la selecció
+case $LANG_NUM in
+    1) LANGUAGE="ca" ;;
+    2) LANGUAGE="es" ;;
+    3) LANGUAGE="en" ;;
+    *) LANGUAGE="ca" ;; # per defecte
 esac
 
 # Comprovar dependències
 print_message "checking_dependencies"
-REQUIRED_PKG=("git" "python3" "lsblk" "xterm")
+REQUIRED_PKG=("git" "python3" "lsblk" "xterm" )
 for pkg in "${REQUIRED_PKG[@]}"; do
     check_command $pkg || exit 1
 done
@@ -87,16 +82,13 @@ USERNAME=${USERNAME:-pi}
 
 USER_HOME="/home/$USERNAME"
 
-# Creació de les carpetes necessàries a /home/$USERNAME
-echo "Creant directoris a $USER_HOME..."
-mkdir -p "$USER_HOME/images"
-mkdir -p "$USER_HOME/.local/share/applications"
-echo "Directoris creats a $USER_HOME/images."
-
-# Configuració del directori d'imatges
+# Configuració del directori d'imatges amb ruta absoluta
 print_message "image_dir_config"
-read -p "Introdueix el directori on es guardaran les imatges (per defecte: $USER_HOME/images): " IMAGE_DIR
-IMAGE_DIR=${IMAGE_DIR:-$USER_HOME/images}
+IMAGE_DIR="${USER_HOME}/images"
+if [ ! -d "$IMAGE_DIR" ]; then
+    mkdir -p "$IMAGE_DIR"
+fi
+echo "Les imatges es guardaran a: $IMAGE_DIR"
 
 # Configurar PiShrink
 print_message "pishrink_setup"
@@ -105,28 +97,26 @@ if ! git clone https://github.com/Drewsif/PiShrink.git; then
     exit 1
 fi
 chmod +x PiShrink/pishrink.sh
-sudo mv PiShrink/pishrink.sh /usr/local/bin/pishrink || { echo "Error: No s'ha pogut moure PiShrink al directori bin."; exit 1; }
+sudo mv PiShrink/pishrink.sh /usr/local/bin/pishrink
 
 # Verificar pindivil.py
 print_message "checking_pindivil"
-if [ ! -f "/home/$USERNAME/pindivil/pindivil.py" ]; then
+if [ ! -f "/home/$USERNAME/pindivil.py" ]; then
     print_message "downloading_pindivil"
-    if ! wget -q https://raw.githubusercontent.com/jordilino/Pindivil/main/pindivil.py -O /home/$USERNAME/pindivil/pindivil.py; then
+    if ! wget -q https://raw.githubusercontent.com/jordilino/Pindivil/main/pindivil.py -O /home/$USERNAME/pindivil.py; then
         echo "Error: No s'ha pogut descarregar pindivil.py. Comprova la connexió a internet."
         exit 1
     fi
     print_message "Fitxer pindivil.py descarregat correctament."
-else
-    echo "El fitxer pindivil.py ja existeix."
 fi
 
-# Creació del llançador d'aplicació
+# Creació del llançador d'aplicació amb ruta absoluta
 print_message "launcher_creation"
 cat << EOF > "$USER_HOME/.local/share/applications/pindivil.desktop"
 [Desktop Entry]
 Name=Pindivil
 Comment=Llançador per a Pindivil
-Exec=pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY python3 /home/$USERNAME/pindivil/pindivil.py
+Exec=pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY python3 /home/$USERNAME/pindivil.py
 Icon=utilities-terminal
 Terminal=false
 Type=Application
