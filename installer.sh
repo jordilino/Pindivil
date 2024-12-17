@@ -63,7 +63,7 @@ fi
 
 # Comprovar dependències
 print_message "checking_dependencies"
-REQUIRED_PKG=("git" "python3" "lsblk" "xterm" "python3-venv")
+REQUIRED_PKG=("git" "python3" "lsblk" "xterm" )
 for pkg in "${REQUIRED_PKG[@]}"; do
     check_command $pkg || exit 1
 done
