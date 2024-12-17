@@ -48,7 +48,7 @@ Abans d'instal·lar i utilitzar **Pindivil**, has d'assegurar-te que tens les se
 
 5. **Executa l'instal·lador**:
    ```bash
-   ./instal·lador.sh
+   ./installer.sh
    ```
 
 6. **Llança Pindivil**: Un cop finalitzada la instal·lació, pots llançar Pindivil des del menú d'aplicacions del teu sistema.
@@ -116,7 +116,7 @@ Antes de instalar y usar **Pindivil**, debes asegurarte de que tienes las siguie
 
 5. **Ejecutar el instalador**:
    ```bash
-   ./instalador.sh
+   ./installer.sh
    ```
 
 6. **Lanzar Pindivil**: Una vez finalizada la instalación, puedes lanzar **Pindivil** desde el menú de aplicaciones de tu sistema.
