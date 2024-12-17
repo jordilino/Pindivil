@@ -28,7 +28,7 @@ Abans d'instal·lar i utilitzar **Pindivil**, has d'assegurar-te que tens les se
 
 1. **Clona el repositori**:
    ```bash
-   git clone https://github.com/el-teu-usuari/pindivil.git
+   git clone https://github.com/jordilino/pindivil.git
    cd pindivil
    ```
 
@@ -96,7 +96,7 @@ Antes de instalar y usar **Pindivil**, debes asegurarte de que tienes las siguie
 
 1. **Clonar el repositorio**:
    ```bash
-   git clone https://github.com/tu_usuario/pindivil.git
+   git clone https://github.com/jordilino/pindivil.git
    cd pindivil
    ```
 
@@ -164,7 +164,7 @@ Before installing and using **Pindivil**, make sure you have the following depen
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your_user/pindivil.git
+   git clone https://github.com/jordilino/pindivil.git
    cd pindivil
    ```
 
