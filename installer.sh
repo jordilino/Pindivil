@@ -63,7 +63,7 @@ sudo chmod +x /usr/local/bin/pindivil
 print_message "creating_launcher"
 desktop_entry="[Desktop Entry]
 Name=Pindivil
-Exec=pkexec python3 /usr/local/bin/pindivil
+Exec=pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR python3 /usr/local/bin/pindivil
 Icon=/usr/local/bin/pindivil_icon64x64.png
 Type=Application
 Categories=Utility;"
