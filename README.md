@@ -28,7 +28,7 @@ Abans d'instal·lar i utilitzar **Pindivil**, has d'assegurar-te que tens les se
 
 1. **Clona el repositori**:
    ```bash
-   git clone https://github.com/jordilino/pindivil.git
+   sudo git clone https://github.com/jordilino/pindivil.git
    cd pindivil
    ```
 
@@ -38,20 +38,14 @@ Abans d'instal·lar i utilitzar **Pindivil**, has d'assegurar-te que tens les se
    sudo apt install git python3 pkexec lsblk xterm python3-venv
    ```
 
-3. **Configura l'entorn virtual (opcional)**:
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate
-   ```
+3. **Instal·la PiShrink**: PiShrink es descarregarà i instal·larà automàticament durant la instal·lació.
 
-4. **Instal·la PiShrink**: PiShrink es descarregarà i instal·larà automàticament durant la instal·lació.
-
-5. **Executa l'instal·lador**:
+4. **Executa l'instal·lador**:
    ```bash
    ./installer.sh
    ```
 
-6. **Llança Pindivil**: Un cop finalitzada la instal·lació, pots llançar Pindivil des del menú d'aplicacions del teu sistema.
+5. **Llança Pindivil**: Un cop finalitzada la instal·lació, pots llançar Pindivil des del menú d'aplicacions del teu sistema.
 
 ### Ús
 
@@ -96,7 +90,7 @@ Antes de instalar y usar **Pindivil**, debes asegurarte de que tienes las siguie
 
 1. **Clonar el repositorio**:
    ```bash
-   git clone https://github.com/jordilino/pindivil.git
+   sudo git clone https://github.com/jordilino/pindivil.git
    cd pindivil
    ```
 
@@ -105,21 +99,15 @@ Antes de instalar y usar **Pindivil**, debes asegurarte de que tienes las siguie
    sudo apt update
    sudo apt install git python3 pkexec lsblk xterm python3-venv
    ```
+   
+3. **Instalar PiShrink**: PiShrink se descargará e instalará automáticamente al ejecutar el proceso de instalación.
 
-3. **Configurar el entorno virtual (opcional)**:
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate
-   ```
-
-4. **Instalar PiShrink**: PiShrink se descargará e instalará automáticamente al ejecutar el proceso de instalación.
-
-5. **Ejecutar el instalador**:
+4. **Ejecutar el instalador**:
    ```bash
    ./installer.sh
    ```
 
-6. **Lanzar Pindivil**: Una vez finalizada la instalación, puedes lanzar **Pindivil** desde el menú de aplicaciones de tu sistema.
+5. **Lanzar Pindivil**: Una vez finalizada la instalación, puedes lanzar **Pindivil** desde el menú de aplicaciones de tu sistema.
 
 ### Uso
 
@@ -164,7 +152,7 @@ Before installing and using **Pindivil**, make sure you have the following depen
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/jordilino/pindivil.git
+ sudo git clone https://github.com/jordilino/pindivil.git
    cd pindivil
    ```
 
@@ -174,20 +162,14 @@ Before installing and using **Pindivil**, make sure you have the following depen
    sudo apt install git python3 pkexec lsblk xterm python3-venv
    ```
 
-3. **Set up a virtual environment (optional)**:
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate
-   ```
+3. **Install PiShrink**: PiShrink will be automatically downloaded and installed when running the installer script.
 
-4. **Install PiShrink**: PiShrink will be automatically downloaded and installed when running the installer script.
-
-5. **Run the installer**:
+4. **Run the installer**:
    ```bash
    ./installer.sh
    ```
 
-6. **Launch Pindivil**: After installation, you can launch **Pindivil** from your system’s applications menu.
+5. **Launch Pindivil**: After installation, you can launch **Pindivil** from your system’s applications menu.
 
 ### Usage
 
