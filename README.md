@@ -31,6 +31,9 @@ Abans d'instal·lar i utilitzar **Pindivil**, has d'assegurar-te que tens les se
 - **xz-utils**
 - **e2fsprogs**
 - **xterm**
+   ```bash
+   sudo apt-get install PiShrink git gzip lsblk parted pkexec pigz python3 python3-venv udev wget xz-utils e2fsprogs xterm
+   ```
 
 
 ### Instal·lació
@@ -106,6 +109,10 @@ Antes de instalar y usar **Pindivil**, debes asegurarte de que tienes las siguie
 - **xz-utils**
 - **e2fsprogs**
 - **xterm**
+   ```bash
+   sudo apt-get install PiShrink git gzip lsblk parted pkexec pigz python3 python3-venv udev wget xz-utils e2fsprogs xterm
+   ```
+  
 
 ### Instalación
 
@@ -180,6 +187,9 @@ Before installing and using **Pindivil**, make sure you have the following depen
 - **xz-utils**
 - **e2fsprogs**
 - **xterm**
+     ```bash
+   sudo apt-get install PiShrink git gzip lsblk parted pkexec pigz python3 python3-venv udev wget xz-utils e2fsprogs xterm
+   ```
 
 ### Installation
 
