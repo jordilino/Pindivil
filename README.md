@@ -1,5 +1,5 @@
 # Pindivil
-![Gratus es in Pindivil!](https://github.com/jordilino/Pindivil/blob/main/pindivil.png)
+![Gratus es in Pindivil!](https://github.com/jordilino/Pindivil/blob/main/pindivil_large_icon.png)
 
 ## Català
 
