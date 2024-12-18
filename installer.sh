@@ -51,7 +51,9 @@ print_message "installing"
 # Copiar fitxers al directori /usr/local/bin
 print_message "copying_files"
 sudo cp "$script_dir/pindivil.py" /usr/local/bin/pindivil
-sudo cp "$script_dir/pindivil.png" /usr/local/bin/
+sudo cp "$script_dir/pindivil.png" /usr/local/bin/pindivil.png
+sudo cp "$script_dir/pindivil_icon64x64.png" /usr/local/bin/pindivil_icon64x64.png
+sudo cp "$script_dir/pindivil_large_icon.png" /usr/local/bin/pindivil_large_icon.png
 
 # Donar permisos d'execució al script principal
 print_message "setting_permissions"
@@ -62,7 +64,7 @@ print_message "creating_launcher"
 desktop_entry="[Desktop Entry]
 Name=Pindivil
 Exec=/usr/local/bin/pindivil
-Icon=/usr/local/bin/pindivil.png
+Icon=/usr/local/bin/pindivil_icon64x64.png
 Type=Application
 Categories=Utility;"
 
