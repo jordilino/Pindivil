@@ -26,7 +26,7 @@ class PindivilApp(QWidget):
         self.logo_label.setAlignment(Qt.AlignCenter)
         self.layout.addWidget(self.logo_label)
 
-        self.info_label = QLabel("Exoptatus Pindivil!", self)
+        self.info_label = QLabel("Gratus es in Pindivil!", self)
         self.info_label.setStyleSheet("font-size: 24px; font-weight: bold;")
         self.info_label.setAlignment(Qt.AlignCenter)
         self.layout.addWidget(self.info_label)
