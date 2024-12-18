@@ -39,14 +39,19 @@ Abans d'instal·lar i utilitzar **Pindivil**, has d'assegurar-te que tens les se
    sudo apt install git python3 pkexec lsblk xterm python3-venv
    ```
 
-3. **Instal·la PiShrink**: PiShrink es descarregarà i instal·larà automàticament durant la instal·lació.
-
-4. **Executa l'instal·lador**:
+3. **Instal·la PiShrink**:
+   ```bash
+   wget https://raw.githubusercontent.com/Drewsif/PiShrink/master/pishrink.sh
+   chmod +x pishrink.sh
+   sudo mv pishrink.sh /usr/local/bin/piShrink
+   ```
+   
+5. **Executa l'instal·lador**:
    ```bash
    sudo bash installer.sh
    ```
 
-5. **Llança Pindivil**: Un cop finalitzada la instal·lació, pots llançar Pindivil des del menú d'aplicacions del teu sistema.
+6. **Llança Pindivil**: Un cop finalitzada la instal·lació, pots llançar Pindivil des del menú d'aplicacions del teu sistema.
 
 ### Ús
 
@@ -101,7 +106,12 @@ Antes de instalar y usar **Pindivil**, debes asegurarte de que tienes las siguie
    sudo apt install git python3 pkexec lsblk xterm python3-venv
    ```
    
-3. **Instalar PiShrink**: PiShrink se descargará e instalará automáticamente al ejecutar el proceso de instalación.
+3. **Instalar PiShrink**: 
+   ```bash
+   wget https://raw.githubusercontent.com/Drewsif/PiShrink/master/pishrink.sh
+   chmod +x pishrink.sh
+   sudo mv pishrink.sh /usr/local/bin/piShrink
+   ```
 
 4. **Ejecutar el instalador**:
    ```bash
@@ -163,7 +173,12 @@ Before installing and using **Pindivil**, make sure you have the following depen
    sudo apt install git python3 pkexec lsblk xterm python3-venv
    ```
 
-3. **Install PiShrink**: PiShrink will be automatically downloaded and installed when running the installer script.
+3. **Install PiShrink**: 
+   ```bash
+   wget https://raw.githubusercontent.com/Drewsif/PiShrink/master/pishrink.sh
+   chmod +x pishrink.sh
+   sudo mv pishrink.sh /usr/local/bin/piShrink
+   ```
 
 4. **Run the installer**:
    ```bash
