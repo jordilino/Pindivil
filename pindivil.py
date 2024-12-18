@@ -23,7 +23,7 @@ class PindivilApp(QWidget):
 
         # Carregar el logo de l'aplicació
         self.logo_label = QLabel(self)
-        pixmap = QPixmap("pindivil.png")
+        pixmap = QPixmap("/usr/local/bin/pindivil.png")
         self.logo_label.setPixmap(pixmap.scaled(200, 200, Qt.KeepAspectRatio))
         self.logo_label.setAlignment(Qt.AlignCenter)
         self.layout.addWidget(self.logo_label)
