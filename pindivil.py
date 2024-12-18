@@ -4,11 +4,12 @@ import threading
 from PyQt5.QtCore import Qt, pyqtSignal, QObject
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import (QApplication, QWidget, QVBoxLayout, QLabel, QPushButton,
-                             QFileDialog, QMessageBox, QTextEdit, QSizePolicy)
+                             QFileDialog, QMessageBox, QTextEdit, QSizePolicy, QHBoxLayout)
+
 import subprocess
 
 class PindivilApp(QWidget):
-    # Definir una señal personalizada para actualizar la interfaz de usuario
+    # Definir una señal personalizada per actualitzar la interfície d'usuari
     append_signal = pyqtSignal(str, bool)
 
     def __init__(self):
@@ -20,17 +21,20 @@ class PindivilApp(QWidget):
 
         self.layout = QVBoxLayout()
 
+        # Carregar el logo de l'aplicació
         self.logo_label = QLabel(self)
         pixmap = QPixmap("pindivil.png")
         self.logo_label.setPixmap(pixmap.scaled(200, 200, Qt.KeepAspectRatio))
         self.logo_label.setAlignment(Qt.AlignCenter)
         self.layout.addWidget(self.logo_label)
 
+        # Frase de benvinguda en llatí
         self.info_label = QLabel("Gratus es in Pindivil!", self)
         self.info_label.setStyleSheet("font-size: 24px; font-weight: bold;")
         self.info_label.setAlignment(Qt.AlignCenter)
         self.layout.addWidget(self.info_label)
 
+        # Botons per a les accions de l'aplicació
         self.check_space_button = QPushButton("Comprovar Espai USB", self)
         self.check_space_button.clicked.connect(self.check_space)
         self.layout.addWidget(self.check_space_button)
@@ -73,8 +77,68 @@ class PindivilApp(QWidget):
 
         self.current_process = None
 
-        # Conectar la señal personalizada con el método para actualizar el QTextEdit
+        # Connectar la senyal personalitzada amb el mètode per actualitzar el QTextEdit
         self.append_signal.connect(self.append_output)
+
+        # Idioma per defecte (Català)
+        self.current_language = "ca"
+
+        # Afegir els botons per canviar d'idioma
+        self.language_layout = QHBoxLayout()
+
+        self.catalan_button = QPushButton("Català", self)
+        self.catalan_button.clicked.connect(lambda: self.set_language("ca"))
+        self.language_layout.addWidget(self.catalan_button)
+
+        self.spanish_button = QPushButton("Español", self)
+        self.spanish_button.clicked.connect(lambda: self.set_language("es"))
+        self.language_layout.addWidget(self.spanish_button)
+
+        self.english_button = QPushButton("English", self)
+        self.english_button.clicked.connect(lambda: self.set_language("en"))
+        self.language_layout.addWidget(self.english_button)
+
+        self.layout.addLayout(self.language_layout)
+
+    def set_language(self, lang_code):
+        """Canviar l'idioma i actualitzar els textos."""
+        self.current_language = lang_code
+        self.update_texts()
+
+    def update_texts(self):
+        """Actualitzar els textos segons l'idioma seleccionat."""
+        if self.current_language == "ca":
+            # Català
+            self.check_space_button.setText("Comprovar Espai USB")
+            self.select_dir_button.setText("Seleccionar Directori d'Imatges")
+            self.create_image_button.setText("Crear imatge des de la SD")
+            self.create_image_shrink_button.setText("Crear imatge des de la SD - Després reduir el tamany amb PiShrink")
+            self.write_image_button.setText("Gravar imatge a la SD")
+            self.shrink_image_button.setText("Reduir tamany .img amb PiShrink")
+            self.cancel_button.setText("Cancelar")
+            self.exit_button.setText("Sortir")
+        elif self.current_language == "es":
+            # Castellà
+            self.check_space_button.setText("Comprobar Espacio USB")
+            self.select_dir_button.setText("Seleccionar Directorio de Imágenes")
+            self.create_image_button.setText("Crear imagen desde la SD")
+            self.create_image_shrink_button.setText("Crear imagen desde la SD - Luego reducir el tamaño con PiShrink")
+            self.write_image_button.setText("Grabar imagen en la SD")
+            self.shrink_image_button.setText("Reducir tamaño .img con PiShrink")
+            self.cancel_button.setText("Cancelar")
+            self.exit_button.setText("Salir")
+        elif self.current_language == "en":
+            # Anglès
+            self.check_space_button.setText("Check USB Space")
+            self.select_dir_button.setText("Select Image Directory")
+            self.create_image_button.setText("Create Image from SD")
+            self.create_image_shrink_button.setText("Create Image from SD - Then Shrink Size with PiShrink")
+            self.write_image_button.setText("Write Image to SD")
+            self.shrink_image_button.setText("Shrink .img Size with PiShrink")
+            self.cancel_button.setText("Cancel")
+            self.exit_button.setText("Exit")
+
+        self.info_label.setText("Gratus es in Pindivil!")  # Mantenir el salut en llatí
 
     def append_output(self, message, overwrite=False):
         if overwrite:
@@ -108,6 +172,7 @@ class PindivilApp(QWidget):
             self.append_signal.emit(f"Directori seleccionat: {dir_name}", True)
 
     def show_warning_dialog(self, message):
+        """Mostrar un diàleg de confirmació amb missatge."""
         reply = QMessageBox.warning(self, "Advertència", message,
                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         return reply == QMessageBox.Yes
@@ -134,6 +199,9 @@ class PindivilApp(QWidget):
         if not device:
             return
 
+        if not self.show_warning_dialog(f"Atenció! La creació de la imatge a {device} destruirà totes les dades del dispositiu. Vols continuar?"):
+            return
+
         file_name, _ = QFileDialog.getSaveFileName(self, "Guardar imatge", "/home/pi/images", "Arxius d'Imatge (*.img *.xz)")
         if file_name:
             self.append_signal.emit("Creant la imatge...", True)
@@ -155,89 +223,54 @@ class PindivilApp(QWidget):
                 command = f"xz -d -k {file_name}"
                 self.start_process(command, lambda: self.shrink_image(uncompressed_file))
             else:
-                self.append_signal.emit(f"Reduint la mida de la imatge {file_name} amb PiShrink...", True)
-                command = f"sudo /usr/local/bin/pishrink {file_name}"
-                if compress_to:
-                    self.start_process(command, lambda: self.compress_image(file_name, compress_to))
-                else:
-                    self.start_process(command, self.handle_finished_shrink)
+                self.append_signal.emit(f"Reduïnt la imatge {file_name}...", True)
+                command = f"sudo piShrink {file_name}"
+                self.start_process(command, lambda: self.compress_image(file_name, compress_to))
 
-    def compress_image(self, input_file, output_file):
-        self.append_signal.emit(f"Comprimin la imatge {input_file} a {output_file}...", True)
-        command = f"xz -z -c {input_file} > {output_file}"
-        self.start_process(command, self.handle_finished_shrink)
+    def compress_image(self, file_name, compress_to=None):
+        self.append_signal.emit(f"Comprimint la imatge a {compress_to or file_name}.xz...", True)
+        command = f"xz {file_name}"
+        self.start_process(command)
 
     def write_image(self):
-        file_name, _ = QFileDialog.getOpenFileName(self, "Selecciona la imatge per gravar", "/home/pi/images", "Arxius d'Imatge (*.img *.xz)")
+        file_name, _ = QFileDialog.getOpenFileName(self, "Selecciona una imatge per escriure", "/home/pi/images", "Arxius d'Imatge (*.img *.xz)")
         if file_name:
             device = self.find_and_prepare_device()
-            if not device:
-                return
-            self.append_signal.emit(f"Gravant la imatge {file_name} a {device}...", True)
-            if file_name.endswith('.xz'):
-                command = f"xz -d -c {file_name} | sudo dd of={device} bs=4M status=progress"
-            else:
-                command = f"sudo dd if={file_name} of={device} bs=4M status=progress"
-            self.start_process(command, self.handle_finished_write)
+            if device:
+                self.append_signal.emit(f"Escrivint la imatge {file_name} a {device}...", True)
+                if file_name.endswith('.xz'):
+                    command = f"xzcat {file_name} | sudo dd of={device} bs=4M status=progress"
+                else:
+                    command = f"sudo dd if={file_name} of={device} bs=4M status=progress"
+                self.start_process(command)
 
-    def start_process(self, command, callback):
-        self.disable_buttons()
-        self.current_process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    def start_process(self, command, on_finished=None):
+        self.current_process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        self.append_signal.emit(f"Process started with PID {self.current_process.pid}.", False)
+        self.process_thread = threading.Thread(target=self.read_process_output, args=(on_finished,))
+        self.process_thread.start()
 
-        def monitor_output():
-            try:
-                while True:
-                    output = self.current_process.stdout.readline()
-                    if output:
-                        self.append_signal.emit(output.strip(), False)
-                    elif self.current_process.poll() is not None:
-                        break
-
-                error_output = self.current_process.stderr.read()
-                if error_output:
-                    self.append_signal.emit(error_output.strip(), False)
-
-            except Exception as e:
-                self.append_signal.emit(f"Error: {str(e)}", False)
-            finally:
-                self.current_process = None
-                callback()
-
-        threading.Thread(target=monitor_output, daemon=True).start()
+    def read_process_output(self, on_finished):
+        stdout, stderr = self.current_process.communicate()
+        if stdout:
+            self.append_signal.emit(stdout.decode(), False)
+        if stderr:
+            self.append_signal.emit(stderr.decode(), False)
+        if on_finished:
+            on_finished()
 
     def cancel_process(self):
         if self.current_process:
             self.current_process.terminate()
+            self.append_signal.emit(f"Process {self.current_process.pid} terminated.", False)
             self.current_process = None
-            self.append_signal.emit("Procés cancel·lat.", True)
-            self.enable_buttons()
-
-    def handle_finished_create(self):
-        self.append_signal.emit("Creació de la imatge finalitzada.", False)
-        self.enable_buttons()
-
-    def handle_finished_shrink(self):
-        self.append_signal.emit("Reducció de la mida de la imatge finalitzada.", False)
-        self.enable_buttons()
-
-    def handle_finished_write(self):
-        self.append_signal.emit("Gravació de la imatge finalitzada.", False)
-        self.enable_buttons()
+            self.cancel_button.setDisabled(True)
 
     def exit_application(self):
         self.close()
 
-    def disable_buttons(self):
-        for button in self.findChildren(QPushButton):
-            button.setDisabled(True)
-        self.cancel_button.setDisabled(False)
-
-    def enable_buttons(self):
-        for button in self.findChildren(QPushButton):
-            button.setEnabled(True)
-        self.cancel_button.setDisabled(True)
-
-app = QApplication(sys.argv)
-window = PindivilApp()
-window.show()
-sys.exit(app.exec_())
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    window = PindivilApp()
+    window.show()
+    sys.exit(app.exec_())
