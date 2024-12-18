@@ -2,39 +2,18 @@
 
 # Variables globals per als missatges en diversos idiomes
 declare -A MESSAGES=(
-    ["select_language_ca"]="Selecciona l'idioma (ca, es, en): "
-    ["select_language_es"]="Selecciona el idioma (ca, es, en): "
-    ["select_language_en"]="Select language (ca, es, en): "
-    ["checking_dependencies_ca"]="Comprovant dependències per desinstal·lar..."
-    ["checking_dependencies_es"]="Comprobando dependencias para desinstalar..."
-    ["checking_dependencies_en"]="Checking dependencies for uninstallation..."
-    ["dependencies_installed_ca"]="Totes les dependències estan instal·lades, però es desinstal·laran."
-    ["dependencies_installed_es"]="Todas las dependencias están instaladas, pero serán desinstaladas."
-    ["dependencies_installed_en"]="All dependencies are installed, but will be uninstalled."
-    ["username_config_ca"]="Configurant el nom d'usuari per desinstal·lar..."
-    ["username_config_es"]="Configurando el nombre de usuario para desinstalar..."
-    ["username_config_en"]="Configuring username for uninstallation..."
-    ["image_dir_config_ca"]="Configurant el directori per eliminar les imatges..."
-    ["image_dir_config_es"]="Configurando el directorio para eliminar las imágenes..."
-    ["image_dir_config_en"]="Configuring directory to remove images..."
-    ["pishrink_setup_ca"]="Eliminant PiShrink..."
-    ["pishrink_setup_es"]="Eliminando PiShrink..."
-    ["pishrink_setup_en"]="Removing PiShrink..."
-    ["checking_pindivil_ca"]="Verificant el fitxer pindivil.py per eliminar..."
-    ["checking_pindivil_es"]="Verificando el archivo pindivil.py para eliminar..."
-    ["checking_pindivil_en"]="Checking pindivil.py file for removal..."
-    ["downloading_pindivil_ca"]="El fitxer pindivil.py no es troba. Eliminant-lo..."
-    ["downloading_pindivil_es"]="El archivo pindivil.py no se encuentra. Eliminándolo..."
-    ["downloading_pindivil_en"]="The pindivil.py file is missing. Removing it..."
-    ["launcher_creation_ca"]="Eliminant el llançador d'aplicació per a Pindivil..."
-    ["launcher_creation_es"]="Eliminando el lanzador de aplicación para Pindivil..."
-    ["launcher_creation_en"]="Removing application launcher for Pindivil..."
-    ["uninstall_complete_ca"]="Desinstal·lació completa. Pindivil ha estat eliminat."
-    ["uninstall_complete_es"]="Desinstalación completa. Pindivil ha sido eliminado."
-    ["uninstall_complete_en"]="Uninstallation complete. Pindivil has been removed."
-    ["remove_dependencies_ca"]="Si vols eliminar les dependències instal·lades, pots executar la següent comanda:"
-    ["remove_dependencies_es"]="Si deseas eliminar las dependencias instaladas, puedes ejecutar el siguiente comando:"
-    ["remove_dependencies_en"]="If you want to remove the installed dependencies, you can run the following command:"
+    ["uninstalling_ca"]="Desinstal·lant Pindivil..."
+    ["uninstalling_es"]="Desinstalando Pindivil..."
+    ["uninstalling_en"]="Uninstalling Pindivil..."
+    ["removing_files_ca"]="Eliminant els fitxers instal·lats..."
+    ["removing_files_es"]="Eliminando los archivos instalados..."
+    ["removing_files_en"]="Removing installed files..."
+    ["removing_launcher_ca"]="Eliminant el llançador d'aplicació..."
+    ["removing_launcher_es"]="Eliminando el lanzador de aplicación..."
+    ["removing_launcher_en"]="Removing application launcher..."
+    ["uninstall_complete_ca"]="Pindivil s'ha desinstal·lat correctament."
+    ["uninstall_complete_es"]="Pindivil ha sido desinstalado correctamente."
+    ["uninstall_complete_en"]="Pindivil has been uninstalled successfully."
 )
 
 # Funció per imprimir un missatge en l'idioma seleccionat
@@ -46,72 +25,31 @@ function print_message() {
 }
 
 # Preguntar per l'idioma
-read -p "Selecciona l'idioma (ca, es, en): " LANGUAGE
-LANGUAGE=${LANGUAGE:-ca}
+echo "Selecciona l'idioma:"
+echo "1. Català (ca)"
+echo "2. Español (es)"
+echo "3. English (en)"
+read -p "Introdueix el número de l'idioma: " LANG_NUM
 
-if [[ ! "$LANGUAGE" =~ ^(ca|es|en)$ ]]; then
-    LANGUAGE="ca"
-    echo "Idioma no vàlid. S'utilitzarà català per defecte."
-fi
+# Assignar idioma basat en la selecció
+case $LANG_NUM in
+    1) LANGUAGE="ca" ;;
+    2) LANGUAGE="es" ;;
+    3) LANGUAGE="en" ;;
+    *) LANGUAGE="ca" ;; # per defecte
+esac
 
-# Comprovar dependències
-print_message "checking_dependencies"
-REQUIRED_PKG=("git" "python3" "lsblk" "xterm" )
-for pkg in "${REQUIRED_PKG[@]}"; do
-    if ! command -v $pkg &> /dev/null; then
-        echo "Error: La comanda $pkg no està disponible. Assegura't que $pkg estigui instal·lat."
-        exit 1
-    fi
-done
-print_message "dependencies_installed"
+# Mostrar missatge d'inici de desinstal·lació
+print_message "uninstalling"
 
-# Configuració del nom d'usuari
-print_message "username_config"
-read -p "Introdueix el nom d'usuari (per defecte: pi): " USERNAME
-USERNAME=${USERNAME:-pi}
+# Eliminar fitxers instal·lats
+print_message "removing_files"
+sudo rm -f /usr/local/bin/pindivil
+sudo rm -f /usr/local/bin/pindivil.png
 
-USER_HOME="/home/$USERNAME"
-INSTALL_DIR="$USER_HOME/pindivil"
-IMAGE_DIR="$USER_HOME/images"
-DESKTOP_FILE="$USER_HOME/.local/share/applications/pindivil.desktop"
-PISHRINK_PATH="/usr/local/bin/pishrink"
-PINDIVIL_FILE="$INSTALL_DIR/pindivil.py"
-PI_SHRINK_DIR="$USER_HOME/PiShrink"
+# Eliminar el llançador d'aplicació
+print_message "removing_launcher"
+sudo rm -f /usr/share/applications/pindivil.desktop
 
-# Verificar i eliminar fitxers i directoris relacionats
-print_message "checking_pindivil"
-if [ -f "$PINDIVIL_FILE" ]; then
-    echo "Eliminant el fitxer pindivil.py..."
-    rm -f "$PINDIVIL_FILE"
-fi
-
-if [ -d "$PI_SHRINK_DIR" ]; then
-    echo "Eliminant el directori PiShrink..."
-    rm -rf "$PI_SHRINK_DIR"
-fi
-
-if [ -f "$DESKTOP_FILE" ]; then
-    echo "Eliminant el llançador d'aplicació..."
-    rm -f "$DESKTOP_FILE"
-fi
-
-if [ -d "$IMAGE_DIR" ]; then
-    echo "Eliminant el directori d'imatges..."
-    rm -rf "$IMAGE_DIR"
-fi
-
-if [ -f "$PISHRINK_PATH" ]; then
-    echo "Eliminant PiShrink..."
-    sudo rm -f "$PISHRINK_PATH"
-fi
-
-# Finalització
+# Informar l'usuari
 print_message "uninstall_complete"
-
-# Mostrar comandes per eliminar les dependències
-print_message "remove_dependencies"
-
-# Mostrar el comando para desinstalar las dependencias
-echo -e "\n========================================"
-echo -e "sudo apt-get remove --purge git python3 lsblk xterm python3-venv"
-echo -e "========================================"
