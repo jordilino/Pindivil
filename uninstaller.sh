@@ -25,11 +25,11 @@ function print_message() {
 }
 
 # Preguntar per l'idioma
-echo "Selecciona l'idioma:"
+echo "Selecciona l'idioma - Seleccionar Idioma - Language Selector:"
 echo "1. Català (ca)"
 echo "2. Español (es)"
 echo "3. English (en)"
-read -p "Introdueix el número de l'idioma: " LANG_NUM
+read -p "Introdueix el número - Introducir numero - Introduce number:" LANG_NUM
 
 # Assignar idioma basat en la selecció
 case $LANG_NUM in
