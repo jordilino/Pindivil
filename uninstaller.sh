@@ -46,6 +46,8 @@ print_message "uninstalling"
 print_message "removing_files"
 sudo rm -f /usr/local/bin/pindivil
 sudo rm -f /usr/local/bin/pindivil.png
+sudo rm -f /usr/local/bin/pindivil_icon64x64.png
+sudo rm -f /usr/local/bin/pindivil_large_icon.png
 
 # Eliminar el llançador d'aplicació
 print_message "removing_launcher"
