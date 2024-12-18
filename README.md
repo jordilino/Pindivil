@@ -187,17 +187,17 @@ Before installing and using **Pindivil**, make sure you have the following depen
 - **xz-utils**
 - **e2fsprogs**
 - **xterm**
-     ```bash
+  ```bash
    sudo apt-get install PiShrink git gzip lsblk parted pkexec pigz python3 python3-venv udev wget xz-utils e2fsprogs xterm
-   ```
+  ```
 
 ### Installation
 
 1. **Clone the repository**:
-   ```bash
- sudo git clone https://github.com/jordilino/pindivil.git
-   cd pindivil
-   ```
+```bash
+sudo git clone https://github.com/jordilino/pindivil.git
+cd pindivil
+```
 
 2. **Install dependencies**:
    ```bash
