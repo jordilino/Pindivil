@@ -23,7 +23,7 @@ Abans d'instal·lar i utilitzar **Pindivil**, has d'assegurar-te que tens les se
 - **lsblk**
 - **xterm**
 - **python3-venv**
-- **PiShrink** (es descarregarà automàticament durant la instal·lació)
+- **PiShrink** 
 
 ### Instal·lació
 
@@ -90,7 +90,7 @@ Antes de instalar y usar **Pindivil**, debes asegurarte de que tienes las siguie
 - **lsblk**
 - **xterm**
 - **python3-venv**
-- **PiShrink** (se descargará automáticamente durante la instalación)
+- **PiShrink** 
 
 ### Instalación
 
@@ -157,7 +157,7 @@ Before installing and using **Pindivil**, make sure you have the following depen
 - **lsblk**
 - **xterm**
 - **python3-venv**
-- **PiShrink** (it will be downloaded automatically during installation)
+- **PiShrink** 
 
 ### Installation
 
