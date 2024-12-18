@@ -194,10 +194,10 @@ Before installing and using **Pindivil**, make sure you have the following depen
 ### Installation
 
 1. **Clone the repository**:
-```bash
-sudo git clone https://github.com/jordilino/pindivil.git
-cd pindivil
-```
+   ```bash
+   sudo git clone https://github.com/jordilino/pindivil.git
+   cd pindivil
+   ```
 
 2. **Install dependencies**:
    ```bash
