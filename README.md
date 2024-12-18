@@ -15,15 +15,23 @@
 
 ### Requisits
 
-Abans d'instal·lar i utilitzar **Pindivil**, has d'assegurar-te que tens les següents dependències instal·lades:
+Abans d'instal·lar i utilitzar **Pindivil**, has d'assegurar-te que tens les següents dependències instal·lades: wget parted gzip pigz xz-utils udev e2fsprogs
 
+- **PiShrink**
 - **git**
-- **python3**
-- **pkexec**
+- **gzip**
 - **lsblk**
-- **xterm**
+- **parted**
+- **pkexec**
+- **pigz**
+- **python3**
 - **python3-venv**
-- **PiShrink** 
+- **udev**
+- **wget**
+- **xz-utils**
+- **e2fsprogs**
+- **xterm**
+
 
 ### Instal·lació
 
@@ -84,13 +92,20 @@ Si vols contribuir a **Pindivil**, pots fer-ho mitjançant *pull requests* al re
 
 Antes de instalar y usar **Pindivil**, debes asegurarte de que tienes las siguientes dependencias instaladas:
 
+- **PiShrink**
 - **git**
-- **python3**
-- **pkexec**
+- **gzip**
 - **lsblk**
-- **xterm**
+- **parted**
+- **pkexec**
+- **pigz**
+- **python3**
 - **python3-venv**
-- **PiShrink** 
+- **udev**
+- **wget**
+- **xz-utils**
+- **e2fsprogs**
+- **xterm**
 
 ### Instalación
 
@@ -151,13 +166,20 @@ Si quieres contribuir a **Pindivil**, puedes hacerlo mediante *pull requests* en
 
 Before installing and using **Pindivil**, make sure you have the following dependencies installed:
 
+- **PiShrink**
 - **git**
-- **python3**
-- **pkexec**
+- **gzip**
 - **lsblk**
-- **xterm**
+- **parted**
+- **pkexec**
+- **pigz**
+- **python3**
 - **python3-venv**
-- **PiShrink** 
+- **udev**
+- **wget**
+- **xz-utils**
+- **e2fsprogs**
+- **xterm**
 
 ### Installation
 
