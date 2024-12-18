@@ -15,7 +15,7 @@
 
 ### Requisits
 
-Abans d'instal·lar i utilitzar **Pindivil**, has d'assegurar-te que tens les següents dependències instal·lades: wget parted gzip pigz xz-utils udev e2fsprogs
+Abans d'instal·lar i utilitzar **Pindivil**, has d'assegurar-te que tens les següents dependències instal·lades: 
 
 - **PiShrink**
 - **git**
