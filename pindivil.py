@@ -171,7 +171,7 @@ class PindivilApp(QWidget):
         if file_name:
             self.append_signal.emit(self.get_text("image_creation"), True)
             if file_name.endswith('.xz'):
-                command = f"sudo dd if={device} bs=4M status=progress | xz > {file_name}"
+                command = f"sudo dd if={device} bs=4M status=progress | xz -T0 > {file_name}"
             else:
                 command = f"sudo dd if={device} of={file_name} bs=4M status=progress"
             self.start_process(command, self.handle_finished_create)
@@ -189,7 +189,7 @@ class PindivilApp(QWidget):
         if file_name:
             self.append_signal.emit(self.get_text("image_creation"), True)
             if file_name.endswith('.xz'):
-                command = f"sudo dd if={device} bs=4M status=progress | xz > {file_name}"
+                command = f"sudo dd if={device} bs=4M status=progress | xz -T0 > {file_name}"
             else:
                 command = f"sudo dd if={device} of={file_name} bs=4M status=progress"
             self.start_process(command, lambda: self.shrink_image(file_name))
@@ -208,7 +208,7 @@ class PindivilApp(QWidget):
             if file_name.endswith('.xz'):
                 uncompressed_file = file_name.replace('.xz', '.img')
                 self.append_signal.emit(f"Decompressing {file_name}...", True)
-                command = f"xz -d -k {file_name}"
+                command = f"xz -T0 -d -k {file_name}"
                 self.start_process(command, lambda: self.shrink_image(uncompressed_file))
             else:
                 self.append_signal.emit(f"Shrinking {file_name}...", True)
@@ -217,7 +217,7 @@ class PindivilApp(QWidget):
 
     def compress_image(self, file_name, compress_to=None):
         self.append_signal.emit(f"Compressing image to {compress_to or file_name}.xz...", True)
-        command = f"xz {file_name}"
+        command = f"xz -T0 {file_name}"
         self.start_process(command)
 
     def write_image(self):
@@ -229,7 +229,7 @@ class PindivilApp(QWidget):
             if file_name.endswith('.xz'):
                 uncompressed_file = file_name.replace('.xz', '.img')
                 self.append_signal.emit(f"Decompressing {file_name}...", True)
-                command = f"xz -d -k {file_name}"
+                command = f"xz -T0 -d -k {file_name}"
                 self.start_process(command, lambda: self.write_image(uncompressed_file))
             else:
                 self.append_signal.emit(f"Writing {file_name} to {device}...", True)
