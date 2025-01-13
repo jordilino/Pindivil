@@ -1,0 +1,152 @@
+import sys
+import os
+import threading
+from PyQt5.QtCore import Qt, pyqtSignal, QObject
+from PyQt5.QtGui import QPixmap
+from PyQt5.QtWidgets import (QApplication, QWidget, QVBoxLayout, QLabel, QPushButton,
+                             QFileDialog, QMessageBox, QTextEdit, QSizePolicy, QHBoxLayout)
+import subprocess
+
+class PindivilApp(QWidget):
+    append_signal = pyqtSignal(str, bool)
+
+    def __init__(self):
+        super().__init__()
+
+        # Inicializar idioma predeterminado
+        self.current_language = "en"  # Idioma por defecto (Inglés)
+
+        self.setWindowTitle(self.get_text("app_title"))
+        self.setGeometry(100, 100, 800, 600)
+        self.setStyleSheet("background-color: #f0f0f0;")
+
+        self.layout = QVBoxLayout()
+
+        # Logo de la aplicación
+        self.logo_label = QLabel(self)
+        pixmap = QPixmap("/usr/local/bin/pindivil.png")
+        self.logo_label.setPixmap(pixmap.scaled(200, 200, Qt.KeepAspectRatio))
+        self.logo_label.setAlignment(Qt.AlignCenter)
+        self.layout.addWidget(self.logo_label)
+
+        # Mensaje de bienvenida
+        self.info_label = QLabel(self.get_text("welcome_msg"), self)
+        self.info_label.setStyleSheet("font-size: 24px; font-weight: bold;")
+        self.info_label.setAlignment(Qt.AlignCenter)
+        self.layout.addWidget(self.info_label)
+
+        # Botones de funcionalidad
+        self.check_space_button = self.create_button("check_space", self.check_space)
+        self.select_dir_button = self.create_button("select_dir", self.select_directory)
+        self.create_image_button = self.create_button("create_image", self.create_image)
+        self.create_image_shrink_button = self.create_button("create_image_shrink", self.create_and_shrink_image)
+        self.write_image_button = self.create_button("write_image", self.write_image)
+        self.shrink_image_button = self.create_button("shrink_image", self.shrink_image)
+
+        # Botón de cancelación
+        self.cancel_button = self.create_button("cancel", self.cancel_process)
+        self.cancel_button.setDisabled(True)
+
+        # Botón para salir
+        self.exit_button = self.create_button("exit", self.exit_application)
+
+        # Área de texto para salida
+        self.output_text = QTextEdit(self)
+        self.output_text.setReadOnly(True)
+        self.output_text.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.layout.addWidget(self.output_text)
+
+        # Cambiar idioma
+        self.language_layout = QHBoxLayout()
+        for lang, label in [("ca", "Català"), ("es", "Español"), ("en", "English"), ("la", "Latine")]:
+            button = QPushButton(label, self)
+            button.clicked.connect(lambda _, code=lang: self.set_language(code))
+            self.language_layout.addWidget(button)
+
+        self.layout.addLayout(self.language_layout)
+        self.setLayout(self.layout)
+
+        # Señal para actualizar salida
+        self.append_signal.connect(self.append_output)
+        self.current_process = None
+
+    def create_button(self, text_key, handler):
+        """Crear un botón con texto dinámico."""
+        button = QPushButton(self.get_text(text_key), self)
+        button.clicked.connect(handler)
+        self.layout.addWidget(button)
+        return button
+
+    def get_text(self, key):
+        """Obtiene texto traducido basado en el idioma actual."""
+        return self.translations.get(self.current_language, {}).get(key, key)
+
+    def append_output(self, message, overwrite=False):
+        """Actualizar área de texto de salida."""
+        if overwrite:
+            self.output_text.setText(message)
+        else:
+            self.output_text.append(message)
+        self.output_text.moveCursor(self.output_text.textCursor().End)
+
+    def set_language(self, lang_code):
+        """Cambiar idioma de la aplicación."""
+        self.current_language = lang_code
+        self.update_texts()
+
+    def update_texts(self):
+        """Actualizar textos de la interfaz según idioma."""
+        self.setWindowTitle(self.get_text("app_title"))
+        for widget, key in [(self.check_space_button, "check_space"), 
+                            (self.select_dir_button, "select_dir"), 
+                            (self.create_image_button, "create_image"), 
+                            (self.create_image_shrink_button, "create_image_shrink"), 
+                            (self.write_image_button, "write_image"), 
+                            (self.shrink_image_button, "shrink_image"), 
+                            (self.cancel_button, "cancel"), 
+                            (self.exit_button, "exit")]:
+            widget.setText(self.get_text(key))
+        self.info_label.setText(self.get_text("welcome_msg"))
+
+    def find_and_prepare_device(self):
+        """Buscar y preparar dispositivo USB."""
+        for device in [f"/dev/sd{chr(i)}" for i in range(ord('a'), ord('n') + 1)]:
+            if os.path.exists(device):
+                self.append_signal.emit(f"Device found: {device}", False)
+                mounted = os.popen(f"lsblk -o MOUNTPOINT -nr {device}").read().strip()
+                if mounted:
+                    os.system(f"sudo umount {device}*")
+                return device
+        QMessageBox.critical(self, self.get_text("warning"), self.get_text("no_device_detected"))
+        return None
+
+    def check_space(self):
+        """Comprobar espacio en USB."""
+        device = self.find_and_prepare_device()
+        if device:
+            output = os.popen(f"fdisk -l {device}").read().strip()
+            self.append_signal.emit(output, True)
+
+    def select_directory(self):
+        """Seleccionar directorio para imágenes."""
+        dir_name = QFileDialog.getExistingDirectory(self, self.get_text("select_dir"), "/home/pi/images")
+        if dir_name:
+            self.append_signal.emit(f"Selected directory: {dir_name}", True)
+
+    # Similar lógica aplicada a create_image, create_and_shrink_image, shrink_image, etc.
+
+    def exit_application(self):
+        self.close()
+
+    translations = {
+        "en": { ... },  # Traducciones en inglés
+        "ca": { ... },  # Traducciones en catalán
+        "es": { ... },  # Traducciones en español
+        "la": { ... }   # Traducciones en latín
+    }
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    window = PindivilApp()
+    window.show()
+    sys.exit(app.exec_())
